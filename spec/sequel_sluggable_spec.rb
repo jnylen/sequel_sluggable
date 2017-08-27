@@ -49,13 +49,13 @@ describe "SequelSluggable" do
     end
 
     it "should accept frozen option" do
-      Item.sluggable_options[:frozen].should be_false
+      Item.sluggable_options[:frozen].should be_falsey
     end
 
     it "should have frozen true by default" do
       class Item < Sequel::Model; end
       Item.plugin :sluggable, :source => :name
-      Item.sluggable_options[:frozen].should be_true
+      Item.sluggable_options[:frozen].should be_truthy
     end
 
     it "should require source option" do
@@ -93,7 +93,7 @@ describe "SequelSluggable" do
     end
 
     it "should not allow changing the options directly" do
-      lambda { Item.sluggable_options[:source] = 'xy' }.should raise_error
+      lambda { Item.sluggable_options[:source] = 'xy' }.should raise_error("can't modify frozen Hash")
     end
   end
 
@@ -149,45 +149,6 @@ describe "SequelSluggable" do
     end
   end
 
-  describe "slug algorithm customization" do
-    before(:each) do
-      class Item < Sequel::Model; end
-    end
-
-    it "should use to_slug method on model if available" do
-      Item.plugin :sluggable,
-                  :source => :name,
-                  :target => :slug
-      Item.class_eval do
-        def to_slug(v)
-           v.chomp.downcase.gsub(/[^a-z0-9]+/,'_')
-        end
-      end
-      Item.create(:name => 'Pavel Kunc').slug.should eql 'pavel_kunc'
-    end
-
-    it "should use only :sluggator proc if defined" do
-      Item.plugin :sluggable,
-                  :source    => :name,
-                  :target    => :slug,
-                  :sluggator => Proc.new {|value, model| value.chomp.downcase.gsub(/[^a-z0-9]+/,'_')}
-      Item.create(:name => 'Pavel Kunc').slug.should eql 'pavel_kunc'
-    end
-
-    it "should use only :sluggator Symbol if defined" do
-      Item.plugin :sluggable,
-                  :source    => :name,
-                  :target    => :slug,
-                  :sluggator => :my_custom_sluggator
-      Item.class_eval do
-        def my_custom_sluggator(v)
-           v.chomp.upcase.gsub(/[^a-zA-Z0-9]+/,'-')
-        end
-      end
-      Item.create(:name => 'Pavel Kunc').slug.should eql 'PAVEL-KUNC'
-    end
-  end
-
   describe "slug generation and regeneration" do
     it "should generate slug when creating model and slug is not set" do
       Item.create(:name => 'Pavel Kunc').slug.should eql 'pavel-kunc'
@@ -214,5 +175,44 @@ describe "SequelSluggable" do
       i.slug.should eql 'pavel-kunc'
     end
 
+  end
+
+  describe "slug algorithm customization" do
+    before(:each) do
+      class Item < Sequel::Model; end
+    end
+
+    it "should use to_sluggable method on model if available" do
+      Item.plugin :sluggable,
+                  :source => :name,
+                  :target => :slug
+      Item.class_eval do
+        def to_sluggable(v)
+           v.chomp.downcase.gsub(/[^a-z0-9]+/,'_')
+        end
+      end
+      Item.create(:name => 'Pavel Kunc').slug.should eql 'pavel_kunc'
+    end
+
+    it "should use only :sluggator proc if defined" do
+      Item.plugin :sluggable,
+                  :source    => :name,
+                  :target    => :slug,
+                  :sluggator => Proc.new {|value, model| value.chomp.downcase.gsub(/[^a-z0-9]+/,'_')}
+      Item.create(:name => 'Pavel Kunc').slug.should eql 'pavel_kunc'
+    end
+
+    it "should use only :sluggator Symbol if defined" do
+      Item.plugin :sluggable,
+                  :source    => :name,
+                  :target    => :slug,
+                  :sluggator => :my_custom_sluggator
+      Item.class_eval do
+        def my_custom_sluggator(v)
+           v.chomp.upcase.gsub(/[^a-zA-Z0-9]+/,'-')
+        end
+      end
+      Item.create(:name => 'Pavel Kunc').slug.should eql 'PAVEL-KUNC'
+    end
   end
 end
