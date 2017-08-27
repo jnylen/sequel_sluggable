@@ -1,7 +1,9 @@
+require 'babosa'
+
 module Sequel
   module Plugins
 
-    # The Sluggable plugin creates hook that automatically sets 
+    # The Sluggable plugin creates hook that automatically sets
     # 'slug' field to the slugged value of the column specified
     # by :source option.
     #
@@ -25,7 +27,7 @@ module Sequel
             sluggator = self.class.sluggable_options[:sluggator]
             slug = sluggator.call(value, self)   if sluggator.respond_to?(:call)
             slug ||= self.send(sluggator, value) if sluggator
-            slug ||= to_slug(value)
+            slug ||= to_sluggable(value)
             super(slug)
           end
         end
@@ -69,7 +71,7 @@ module Sequel
           raise ArgumentError, "You must provide :source column" unless options[:source]
           sluggator = options[:sluggator]
           if sluggator && !sluggator.is_a?(Symbol) && !sluggator.respond_to?(:call)
-            raise ArgumentError, "If you provide :sluggator it must be Symbol or callable." 
+            raise ArgumentError, "If you provide :sluggator it must be Symbol or callable."
           end
           options[:source]    = options[:source].to_sym
           options[:target]    = options[:target] ? options[:target].to_sym : DEFAULT_TARGET_COLUMN
@@ -86,7 +88,7 @@ module Sequel
           target = self.class.sluggable_options[:target]
           set_target_column unless self.send(target)
         end
-        
+
         # Sets a slug column to the slugged value
         def before_update
           super
@@ -101,11 +103,11 @@ module Sequel
         #
         # @param [String] String to be slugged
         # @return [String]
-        def to_slug(value)
-          value.chomp.downcase.gsub(/[^a-z0-9]+/,'-')
+        def to_sluggable(value)
+          value.to_slug.normalize.to_s
         end
 
-        # Sets target column with source column which 
+        # Sets target column with source column which
         # effectively triggers slug generation
         def set_target_column
           target = self.class.sluggable_options[:target]
