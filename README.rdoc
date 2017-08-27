@@ -1,6 +1,6 @@
 = sequel_sluggable
 
-Please note that to_slug is renamed to to_sluggable in this fork as we use babosa's to_slug.
+0.1.0 Change: Please note that to_slug is renamed to to_sluggable as we use babosa's to_slug.
 
 == Install
 
