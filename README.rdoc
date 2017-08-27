@@ -7,8 +7,8 @@ Please note that to_slug is renamed to to_sluggable in this fork as we use babos
 Install:
   [sudo] gem install sequel_sluggable
 
-or Add:
-  `gem 'sequel_sluggable'` to Gemfile
+or add this to your `Gemfile`:
+  gem 'sequel_sluggable'
 
 == Usage
 
