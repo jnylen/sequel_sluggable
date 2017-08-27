@@ -2,7 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 require 'date'
-require 'lib/sequel_sluggable/version'
+require File.expand_path('../lib/sequel/plugins/sluggable/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.name     = 'sequel_sluggable'
@@ -14,12 +14,13 @@ Gem::Specification.new do |gem|
   gem.summary = 'Sequel plugin which provides Slug functionality for model.'
   gem.description = gem.summary
 
-  gem.has_rdoc = true 
+  gem.has_rdoc = true
   gem.require_paths = ['lib']
   gem.extra_rdoc_files = ['README.rdoc', 'LICENSE', 'CHANGELOG']
   gem.files = Dir['Rakefile', '{lib,spec}/**/*', 'README*', 'LICENSE*', 'CHANGELOG*'] & `git ls-files -z`.split("\0")
 
-  gem.add_dependency 'sequel', ">= 3.0.0"
+  gem.add_dependency 'sequel', '>= 4.0.0'
+  gem.add_dependency 'babosa', '~> 1.0', '>= 1.0.2'
   gem.add_development_dependency 'sqlite3-ruby'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'yard'
