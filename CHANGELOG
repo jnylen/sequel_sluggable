@@ -1,3 +1,10 @@
+== 0.1.0, 2017-08-28
+* Move the plugin to a folder that Sequel doesn't warn about
+* Add babosa
+* Rename to_slug to to_sluggable in favor of babosa's to_slug
+* Require Sequel 4+
+* Fix spec to require rspec.
+
 == 0.0.6, 2010-05-02
 * Make Rakefile and gemspec sane
 * Fix the strucutre of the gem
