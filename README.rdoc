@@ -1,5 +1,7 @@
 = sequel_sluggable
 
+Please note that to_slug is renamed to to_sluggable in this fork as we use babosa's to_slug.
+
 == Install
 
 Add gemcutter.org source if you don't have it:
@@ -35,39 +37,39 @@ which is readonly.
 
 == When is slug generated?
 
-By default slug is generated *ONLY* when model is created and you 
-<strong>didn't set it</strong>. <strong>When you update model slug 
-is not updated by default</strong> but if you set :frozen => false, 
+By default slug is generated *ONLY* when model is created and you
+<strong>didn't set it</strong>. <strong>When you update model slug
+is not updated by default</strong> but if you set :frozen => false,
 slug will be regenerated on update. Some examples:
 
   class Item < Sequel::Model
-    plugin :source => :name
+    plugin :sluggable, :source => :name
     ...
   end
-  
+
   Item.create(:name => 'X')      # Generates slug
-  
+
   i = Item.new(:name => 'X')
   i.slug = 'X Y'                 # Sets slug manualy
   i.save                         # Slug is not regenerated but the set slug is used
   i.slug                         # => x-y
   i.update(:name => 'Y')         # Won't regenerate slug, because slug is frozen by default
   i.slug                         # => x-y
-  
+
   BUT:
-  
+
   class Item < Sequel::Model
-    plugin :source => :name, :frozen => false
+    plugin :sluggable, :source => :name, :frozen => false
     ...
   end
-  
+
   i = Item.create(:name => 'X')  # Generates slug
   i.update(:name => 'Y')         # Will regenerate slug, because slug is now not frozen
   i.slug                         # => y
 
 == Access/Set slug
 
-You can access slug via your normal Sequel reader. By default that will be 
+You can access slug via your normal Sequel reader. By default that will be
 <b>Model#slug</b> method. If you customize this via :target option than you have
 <b>Model#:target</b>.
 
@@ -89,28 +91,28 @@ If you provide _:sluggator_ Proc or Symbol the sluggator will be called:
 OR
 
   class MyModel < Sequel::Model
-    plugin :sluggable, :source => :name, :sluggator => :my_to_slug
+    plugin :sluggable, :source => :name, :sluggator => :my_to_sluggable
   end
 
 If you don't provide _:sluggator_ sequel_sluggable will try to use
-<b>Model#to_slug(value)</b>. So if you have in your model this method
+<b>Model#to_sluggable(value)</b>. So if you have in your model this method
 it will be used:
 
   class MyModel < Sequel::Model
     plugin :sluggable, :source => :name
 
-    def to_slug(value)
+    def to_sluggable(value)
       value.upcase
     end
   end
 
-If you don't define <b>Model#to_slug</b> or *:sluggator* sequel_sluggable
+If you don't define <b>Model#to_sluggable</b> or *:sluggator* sequel_sluggable
 will use it's own default implementation which does following:
- 
+
   'value_of_the_source_column'.chomp.downcase.gsub(/[^a-z0-9]+/,'-')
 
 = Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a
