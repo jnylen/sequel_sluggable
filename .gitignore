@@ -20,3 +20,5 @@ rdoc
 *.gem
 
 ## PROJECT::SPECIFIC
+vendor
+.bundle

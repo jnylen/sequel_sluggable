@@ -7,10 +7,10 @@ require File.expand_path('../lib/sequel/plugins/sluggable/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.name     = 'sequel_sluggable'
   gem.version  = Sequel::Plugins::Sluggable::VERSION.dup
-  gem.authors  = ['Pavel Kunc']
+  gem.authors  = ['Pavel Kunc', 'Joakim Nylén']
   gem.date     = Date.today.to_s
-  gem.email = 'pavel.kunc@gmail.com'
-  gem.homepage = 'http://github.com/pk/sequel_sluggable'
+  gem.email = 'me@jnylen.nu'
+  gem.homepage = 'http://github.com/jnylen/sequel_sluggable'
   gem.summary = 'Sequel plugin which provides Slug functionality for model.'
   gem.description = gem.summary
 
