@@ -126,10 +126,12 @@ will use it's own default implementation which does following:
 
 * Pavel Kunc
 * Jakub "Botanicus" Stastny
+* Joakim Nylén
 
 == Copyright
 
 Copyright (c) 2009 Pavel Kunc.
+
 Copyright (c) 2017 Joakim Nylén.
 
 See LICENSE for details.
