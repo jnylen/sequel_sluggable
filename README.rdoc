@@ -1,3 +1,5 @@
+DEPRECATED: You should use the more modern plugin sequel_slugging rather than this one. Slugging has history tracking, uuid on duplicates etc.
+
 = sequel_sluggable
 
 0.1.0 Change: Please note that to_slug is renamed to to_sluggable as we use babosa's to_slug.
